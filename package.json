@@ -1,0 +1,23 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "npm run build && npm run start"
+  },
+  "dependencies": {
+    "chalk": "^5.5.0",
+    "discord.js": "^14.0.0",
+    "dotenv": "^16.0.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.25"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.9",
+    "tsx": "^3.14.0",
+    "typescript": "^5.0.0"
+  }
+}
