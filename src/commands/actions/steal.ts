@@ -17,7 +17,7 @@ export const steal: BotCommand = {
     },
 
     async handleCommand(message: Message) {
-        const userId = message.author.id;
+        const userId = String(message.author.id);
         const profile = await getProfile(userId);
         let stolen;
 
@@ -38,11 +38,11 @@ export const steal: BotCommand = {
             return message.reply("👀 You must mention someone else to steal from.");
         }
 
-        const targetProfile = await getProfile(mention.id);
+        const targetProfile = await getProfile(String(mention.id));
         if (!targetProfile) {
+            logger.error(`${mention.id} no tiene perfil`)
             return message.reply("❌ That user doesn't have a profile yet.");
         }
-
         const roll = Math.random();
 
         if (roll < 0.05) {
@@ -94,7 +94,7 @@ export const steal: BotCommand = {
                 setCooldown(userId, action, cooldownMs, 'database'),
             ]);
 
-            logger.warn(`${profile.username} got caught by police trying to rob ${mention.username} and paid ${fine} coins.`);
+            logger.info(`${profile.username} got caught by police trying to rob ${mention.username} and paid ${fine} coins.`);
             return message.reply(`🚔 The police caught you red-handed trying to rob ${mention.username}. You paid a **${fine} coin** fine and got away… barely.`);
         }
 
@@ -107,7 +107,7 @@ export const steal: BotCommand = {
             setCooldown(userId, action, cooldownMs, 'database'),
         ]);
 
-        logger.error(`${profile.username} was ambushed by fake cops and lost ${heavyFine} coins.`);
+        logger.info(`${profile.username} was ambushed by fake cops and lost ${heavyFine} coins.`);
         return message.reply(`💀 You got ambushed by a fake cop. Lost **${heavyFine} coins** and woke up in a trash can.`);
     }
 };
