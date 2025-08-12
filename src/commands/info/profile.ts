@@ -14,17 +14,24 @@ export const profile: BotCommand = {
     },
 
     async handleCommand(message: Message) {
-        const profile = await getProfile(message.author.id);
+        const profile = await getProfile(String(message.author.id));
+        const thumbnail = message.author.avatarURL();
         if (!profile) {
             message.reply("❌ You don't have a profile yet. Try playing a game first!");
             return;
         }
 
-        message.reply(
-            `🧑‍💼 Profile of ${profile.username}:
-      🪙 Coins: ${profile.monedas}
-      🏆 Wins: ${profile.victorias}
-      💥 Losses: ${profile.derrotas}`
-        );
+        const embed = {
+            color: profile.color,
+            title: `:bust_in_silhouette: ${profile.username}'s Profile`,
+            thumbnail: {
+                url: thumbnail
+            },
+            fields: [
+                { name: '\n', value: `:coin: Coins: ${profile.monedas}`, inline: true }
+            ]
+        };
+
+        await message.reply({embeds: [embed]});
     }
 };

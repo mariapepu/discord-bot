@@ -1,4 +1,4 @@
-import {Message} from 'discord.js';
+import {EmbedBuilder, Message} from 'discord.js';
 import {cleanExpiredCooldowns, getProfile} from '../../services/profileService.js';
 import type {BotCommand} from "../../types/BotCommand";
 import {msToTime} from "../../utils/timeFormatter.js";
@@ -16,27 +16,38 @@ export const cooldowns: BotCommand = {
 
     async handleCommand(message: Message) {
         const userId = message.author.id;
-        let profile = await getProfile(userId);
+        let profile = await getProfile(String(userId));
         if (!profile) {
             return message.reply("❌ You don't have a profile yet. Try playing a game first!");
         }
 
-        // Borra los cooldowns expirados
+        // 🧹 Limpiar cooldowns expirados
         profile = await cleanExpiredCooldowns(profile);
 
         const now = Date.now();
         const cooldowns = profile.cooldowns || {};
-
+        let fields;
         if (Object.keys(cooldowns).length === 0) {
-            return message.reply("✅ You have no active cooldowns.");
+            fields = [{
+                name: "✅ You have no active cooldowns.",
+                value: "",
+                inline: false
+            }]
+        } else {
+            fields = Object.entries(cooldowns).map(([action, expiresAt]) => ({
+                name: action,
+                value: `⏳ ${msToTime(Math.max(0, expiresAt - now))}`,
+                inline: false
+            }));
         }
 
-        let output = '⏱️ Your active cooldowns:\n';
-        for (const [action, expiresAt] of Object.entries(cooldowns)) {
-            const remaining = Math.max(0, expiresAt - now);
-            output += `   ⛔ **${action}**: ${msToTime(remaining)}\n`;
-        }
+        // 🖌️ Crear el embed
+        const embed = new EmbedBuilder()
+            .setColor(0xFFB5C0)
+            .setTitle('⏱️ Your Active Cooldowns')
+            .setDescription('Here are the commands currently on cooldown:')
+            .addFields(fields);
 
-        message.reply(output);
+        await message.reply({embeds: [embed]});
     }
 };

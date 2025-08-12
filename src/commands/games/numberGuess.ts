@@ -28,12 +28,12 @@ export const numberGuess: BotCommand = {
         const userId = <string>message.author.id;
 
         if (activeGames.has(userId)) {
-            message.reply(`⚠️ You already have a started game. Say the number u FAAAAILURE`);
+            await message.reply(`⚠️ You already have a started game. Say the number u FAAAAILURE`);
             return;
         }
 
         if (isOnCooldown(userId, this.command, 5)) {
-            message.reply('🕒 Espera unos segundos antes de volver a jugar.');
+            await message.reply('🕒 Espera unos segundos antes de volver a jugar.');
             return;
         }
 
@@ -44,19 +44,18 @@ export const numberGuess: BotCommand = {
         }, TIME_LIMIT_MS);
 
         activeGames.set(userId, {number, userId, timeout});
-        message.reply('🎲 Guess the number (from 1 to 10)');
+        await message.reply('🎲 Guess the number (from 1 to 10)');
     },
 
     async handleMessage(message: Message) {
-        const channelId = <string>message.channel.id;
-        const userId = <string>message.author.id;
+        const userId = String(message.author.id);
 
         const data = activeGames.get(userId);
         if (!data || data.userId !== userId) return;
 
         const guess = parseInt(message.content);
         if (!VALID_NUMS.includes(guess)) {
-            message.reply(`🤦 ARE U STOOOPID? or were you fed with dad’s milk? I've said 1 to 10 🖕`);
+            await message.reply(`🤦 ARE U STOOOPID? or were you fed with dad’s milk? I've said 1 to 10 🖕`);
             return;
         }
 

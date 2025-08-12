@@ -17,6 +17,15 @@ export class UserProfile {
     @Column({default: 0})
     derrotas!: number;
 
+    @Column({default: 0})
+    robosGanados!: number;
+
+    @Column({default: 0})
+    robosIntentos!: number;
+
+    @Column({default: 0xFFB5C0})
+    color!: number;
+
     @Column({type: 'json', nullable: true, default: {}})
     cooldowns: Record<string, number>;
 

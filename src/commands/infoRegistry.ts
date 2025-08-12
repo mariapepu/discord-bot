@@ -3,8 +3,9 @@ import {Message} from "discord.js";
 import {help} from './info/help.js';
 import {profile} from './info/profile.js';
 import {cooldowns} from "./info/cooldowns.js";
+import {shop} from "./info/shop.js";
 
-export const infoCommands: BotCommand[] = [help, profile, cooldowns];
+export const infoCommands: BotCommand[] = [help, profile, cooldowns, shop];
 
 export function handleCommand(message: Message) {
     const command = infoCommands.find(cmd => {
