@@ -26,6 +26,12 @@ export class UserProfile {
     @Column({default: 0xFFB5C0})
     color!: number;
 
+    @Column({default: 0})
+    level!: number;
+
+    @Column({default: 0})
+    xp!: number;
+
     @Column({type: 'json', nullable: true, default: {}})
     cooldowns: Record<string, number>;
 
