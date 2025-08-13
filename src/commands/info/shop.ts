@@ -1,6 +1,6 @@
 import {ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message, MessageFlags} from 'discord.js';
 import type {BotCommand} from '../../types/BotCommand';
-import {items} from '../../entities/Item'
+import {items} from '../../entities/Item.js'
 
 const ITEMS_PER_PAGE = 5;
 
